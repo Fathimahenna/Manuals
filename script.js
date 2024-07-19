@@ -1,17 +1,18 @@
 // script.js
 
 function downloadPDF() {
-    // Replace 'YourFileName.pdf' with the actual file name of your PDF
-    var fileUrl = "QAQCManual.pdf"; // Assuming 'YourFileName.pdf' is in the same repository
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", fileUrl, true);
-    xhr.responseType = "blob";
-    xhr.onload = function () {
-        var blob = xhr.response;
-        var link = document.createElement('a');
-        link.href = window.URL.createObjectURL(blob);
-        link.download = "QAQCManual.pdf"; // Adjust the file name if necessary
-        link.click();
-    };
-    xhr.send();
+    var fileUrl = "QAQCManual.pdf";
+    
+    fetch(fileUrl)
+        .then(response => response.blob())
+        .then(blob => {
+            var link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = "QAQCManual.pdf"; // Adjust the file name if necessary
+            link.style.display = 'none'; // Hide the link
+            document.body.appendChild(link); // Add the link to the document
+            link.click(); // Click the link to download the file
+            document.body.removeChild(link); // Remove the link from the document
+        })
+        .catch(err => console.error('Error fetching file:', err));
 }
